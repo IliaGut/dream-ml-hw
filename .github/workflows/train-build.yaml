@@ -1,0 +1,36 @@
+name: Build Docker and Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        id: build
+        run: docker build -t dream-ml-predictor:latest .
+
+      - name: Check Build Status
+        id: build_status
+        run: |
+          echo "Build finished with status: $?"
+          if [ $? -ne 0 ]; then
+            echo "Build failed. Exiting."
+            exit 1
+          fi
+
+      - name: Create and Push Tag
+        if: steps.build_status.outcome == 'success'
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git tag | sort -V | tail -n 1)
+          NEW_TAG=$(echo $LATEST_TAG | awk -F. -v OFS=. '{$NF++;print}')
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
