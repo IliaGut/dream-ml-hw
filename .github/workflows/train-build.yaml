@@ -40,3 +40,20 @@ jobs:
           NEW_TAG=$(echo $LATEST_TAG | awk -F. -v OFS=. '{$NF++;print}')
           git tag $NEW_TAG
           git push origin $NEW_TAG
+
+
+      # - name: Set up aws
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: *region*
+
+      # - name: Authenticate docker to ecr
+      #   run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin *account*.dkr.ecr.*region*.amazonaws.com
+
+      # - name: Tag Image
+      #   run: docker tag dream-ml-predictor:latest *account*.dkr.ecr.*region*.amazonaws.com/my-repo:$NEW_TAG
+
+      # - name: Push Image to ecr
+      #   run: docker push *account*.dkr.ecr.*region*.amazonaws.com/my-repo:$NEW_TAG
