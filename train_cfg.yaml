@@ -1,0 +1,72 @@
+field_types:
+  categorical_features:
+    - MSZoning
+    - LotConfig
+    - BldgType
+    - Exterior1st
+  numerical_features:
+    - MSSubClass
+    - LotArea
+    - OverallCond
+    - YearBuilt
+    - YearRemodAdd
+    - BsmtFinSF2
+    - TotalBsmtSF
+  target: SalePrice
+
+google_drive_loader:
+  link: https://drive.google.com/file/d/1kqnB4J8FuF1k8xLIvfbPE1jsqUwd3wVH/view?usp=sharing
+  index_col: Id
+  dropna_cols:
+    - SalePrice
+
+cv_options:
+  cv: 5
+  random_state: 0
+  scorer: neg_mean_squared_error
+
+pipeline_options:
+  linear_regression:
+    - name: ohe
+      class: sklearn.preprocessing.OneHotEncoder
+      params:
+        sparse_output: False
+        handle_unknown: infrequent_if_exist
+      cols:
+        - MSZoning
+        - LotConfig
+        - BldgType
+        - Exterior1st
+    - name: lin_reg
+      class: sklearn.linear_model.LinearRegression
+      params: {}
+  random_forest:
+    - name: ohe
+      class: sklearn.preprocessing.OneHotEncoder
+      params:
+        sparse_output: False
+        handle_unknown: infrequent_if_exist
+      cols:
+        - MSZoning
+        - LotConfig
+        - BldgType
+        - Exterior1st
+    - name: random_forest
+      class: sklearn.ensemble.RandomForestRegressor
+      params:
+        n_estimators: 10
+        random_state: 0
+  svr_pipe:
+    - name: ohe
+      class: sklearn.preprocessing.OneHotEncoder
+      params:
+        sparse_output: False
+        handle_unknown: infrequent_if_exist
+      cols:
+        - MSZoning
+        - LotConfig
+        - BldgType
+        - Exterior1st
+    - name: svr
+      class: sklearn.svm.SVR
+      params: {}

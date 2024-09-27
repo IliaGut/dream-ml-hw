@@ -1,0 +1,8 @@
+Werkzeug==2.2.2
+Flask==2.2.2
+joblib==1.1.1
+numpy==1.23.5
+pandas==1.5.3
+PyYAML==6.0
+scikit_learn==1.2.1
+typing_extensions==4.12.2
